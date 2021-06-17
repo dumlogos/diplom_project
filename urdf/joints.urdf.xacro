@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot name="JOINTS" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+ 
+    <joint name="base_link_joint" type="fixed">
+        <origin xyz="0 0 ${whl_r+base_z_to_wheel+0.01}" rpy="0 0 0"/>
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+    </joint>    
+
+    <joint name="caster_rotator_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="-0.18 0 ${-0.06}"/>
+        <parent link="base_link"/>
+        <child link="caster_rotator"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="caster_joint" type="continuous">
+        <origin rpy="${M_PI_2} 0 0" xyz="-0.02 0 -0.03"/>
+        <parent link="caster_rotator"/>
+        <child link="caster"/>
+        <axis xyz="0 0 1"/>
+        <dynamics damping="10" friction="0.05"/>
+    </joint>
+
+    <joint name="brush_lift_joint" type="prismatic">
+        <origin rpy="0 0 ${M_PI_2}" xyz="0.2 0 ${-base_h/2}"/>
+        <parent link="base_link"/>
+        <child link="brush_lift"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="30" velocity="1.0" lower="0" upper="0.035"/>
+    </joint>
+
+    <joint name="left_brush_connector1_joint" type="fixed">
+        <origin rpy="0 ${M_PI_2} 0" xyz="0.04 0 -0.04"/>
+        <parent link="brush_lift"/>
+        <child link="left_brush_connector1"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="right_brush_connector1_joint" type="fixed">
+        <origin rpy="0 ${M_PI_2} 0" xyz="-0.04 0 -0.04"/>
+        <parent link="brush_lift"/>
+        <child link="right_brush_connector1"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="left_brush_connector2_joint" type="fixed">
+        <origin rpy="0 ${-M_PI_2} 0" xyz="0 0.008 0.04"/>
+        <parent link="left_brush_connector1"/>
+        <child link="left_brush_connector2"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="right_brush_connector2_joint" type="fixed">
+        <origin rpy="0 ${-M_PI_2} 0" xyz="0 0.008 -0.04"/>
+        <parent link="right_brush_connector1"/>
+        <child link="right_brush_connector2"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="left_brush_joint" type="continuous">
+        <origin rpy="0 0 0" xyz="0 0 -0.01"/>
+        <parent link="left_brush_connector2"/>
+        <child link="left_brush"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="right_brush_joint" type="continuous">
+        <origin rpy="0 0 0" xyz="0 0 -0.01"/>
+        <parent link="right_brush_connector2"/>
+        <child link="right_brush"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <joint name="hokuyo_joint" type="fixed">
+        <origin xyz="${base_r - hokuyo_size/2} 0 ${base_h/2+hokuyo_size/2}" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="hokuyo_link" />
+    </joint>
+
+</robot>

@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<robot name="cleaning_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!--Inclusions-->
+    <xacro:include filename="$(find diplom)/urdf/colors.urdf.xacro"/>
+    <xacro:include filename="$(find diplom)/urdf/constants.urdf.xacro"/>
+    <xacro:include filename="$(find diplom)/urdf/properties.urdf.xacro"/>
+    <xacro:include filename="$(find diplom)/urdf/macros.urdf.xacro"/>
+    <xacro:include filename="$(find diplom)/urdf/links.urdf.xacro"/>  
+    <xacro:include filename="$(find diplom)/urdf/joints.urdf.xacro"/>
+    <xacro:include filename="$(find diplom)/urdf/wheels.urdf.xacro"/>
+
+
+    <xacro:wheel fb="front" lr="right" parent="base_link" translateX="1" translateY="-1" flipY="1"/>
+    <xacro:wheel fb="front" lr="left" parent="base_link" translateX="1" translateY="1" flipY="1"/>
+
+    
+    <gazebo reference="base_footprint">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="base_link">
+        <material>Gazebo/White</material>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="caster_rotator">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+ 
+    <gazebo reference="caster">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="brush_lift">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="left_brush_connector1">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="left_brush_connector2">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="right_brush_connector1">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="right_brush_connector2">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="left_brush">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="right_brush">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="hokuyo_link">
+        <material>Gazebo/Blue</material>
+        <turnGravityOff>false</turnGravityOff>
+        <sensor type="ray" name="head_hokuyo_sensor">
+            <pose>${hokuyo_size/2} 0 0 0 0 0</pose>
+            <visualize>false</visualize>
+            <update_rate>40</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>720</samples>
+                        <resolution>1</resolution>
+                        <min_angle>${-M_PI_2}</min_angle>
+                        <max_angle>${M_PI_2}</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.10</min>
+                    <max>10.0</max>
+                    <resolution>0.001</resolution>
+                </range>
+            </ray>
+            <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+                <topicName>/scan</topicName>
+                <frameName>hokuyo_link</frameName>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <legacyMode>true</legacyMode>
+            <rosDebugLevel>Debug</rosDebugLevel>
+            <publishWheelTF>false</publishWheelTF>
+            <robotNamespace>/</robotNamespace>
+            <publishTf>1</publishTf>
+            <publishWheelJointState>false</publishWheelJointState>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>100.0</updateRate>
+            <leftJoint>front_left_wheel_joint</leftJoint>
+            <rightJoint>front_right_wheel_joint</rightJoint>
+            <wheelSeparation>${2*base_r}</wheelSeparation>
+            <wheelDiameter>${2*whl_r}</wheelDiameter>
+            <broadcastTF>1</broadcastTF>
+            <wheelTorque>30</wheelTorque>
+            <wheelAcceleration>1.5</wheelAcceleration>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometryFrame>odom</odometryFrame>
+            <odometryTopic>odom</odometryTopic>
+            <robotBaseFrame>base_footprint</robotBaseFrame>
+        </plugin>
+    </gazebo> 
+
+</robot>

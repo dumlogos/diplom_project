@@ -1,0 +1,20 @@
+<launch>
+
+    <arg name="map_file" default="$(find diplom)/maps/sim_world.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+    <arg name="initial_pose_x" default="0"/>
+    <arg name="initial_pose_y" default="0"/>
+    <arg name="initial_pose_a" default="0.0"/>
+
+    <include file="$(find diplom_training)/launch/includes/amcl.launch.xml">
+
+        <arg name="initial_pose_x" value="$(arg initial_pose_x)" default="0"/>
+        <arg name="initial_pose_y" value="$(arg initial_pose_y)" default="0"/>
+        <arg name="initial_pose_a" value="$(arg initial_pose_a)" default="0"/>
+
+    </include>
+
+    <include file="$(find diplom)/launch/includes/move_base.launch.xml"/>
+
+</launch>
