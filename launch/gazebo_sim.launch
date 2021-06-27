@@ -14,15 +14,17 @@
         <arg name="headless" value="$(arg headless)"/>
     </include>
 
-    <param  name="robot_description" command="$(find xacro)/xacro --inorder '$(find diplom)/urdf/cleaning_robot.urdf.xacro'"/>
+    <param  name="robot_description" command="$(find xacro)/xacro --inorder '$(find diplom)/urdf/cleaning_robot.xacro'"/>
 
+    
 
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
         <param name="publish_frequency" type="double" value="50.0"/>
     </node>
     
-    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
+     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
           output="screen" args="-urdf -model cleaning_robot -param robot_description"/>
+    
 
 </launch>
